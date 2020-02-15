@@ -44,7 +44,6 @@ Promise.all([
     }
 
     entries.sort((a, b) => (a.year > b.year) ? 1 : -1);
-    console.log(entries);
 
     return entries;
 }).then(function(data) {
@@ -59,8 +58,7 @@ Promise.all([
         .attr("transform",
               "translate(" + margin.left * 1.5 + "," + margin.top * 1.5 + ")");;
 
-    const chart = svg.append('g')
-                    .attr('transform', `translate(${margin}, ${margin})`);
+    const chart = svg.append('g');
 
     let xScale = d3.scaleBand()
         .domain(data.map(function(d) { return d.year}))
