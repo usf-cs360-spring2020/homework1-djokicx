@@ -1,21 +1,135 @@
----
-layout: null
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ site.title }}</title>
-    <description>{{ site.description }}</description>
-    <link>{{ site.url }}</link>
-    <atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
-    {% for post in site.posts limit:10 %}
+    <title>Dejan Djokic</title>
+    <description>Dejan's data viz blog.</description>
+    <link>http://localhost:4000</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    
       <item>
-        <title>{{ post.title }}</title>
-        <description>{{ post.content | xml_escape | replace: 'javascript||' | replace: 'shell||' | replace: 'ruby||' | replace: 'html||' }}</description>
-        <pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
-        <link>{{ site.url }}{{ post.url }}</link>
-        <guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
+        <title>SFO Passengers Data (H1)</title>
+        <description>&lt;h2 id=&quot;dataset&quot;&gt;Dataset&lt;/h2&gt;
+
+&lt;p&gt;Source: &lt;a href=&quot;data.sfgov.org&quot;&gt;data.sfgov.org&lt;/a&gt;&lt;br /&gt;
+Publishing Department: Airport (SFO)&lt;br /&gt;
+Rows: &lt;strong&gt;21.2K&lt;/strong&gt;&lt;br /&gt;
+Columns: &lt;strong&gt;12&lt;/strong&gt;&lt;br /&gt;
+License: Public Domain Dedication and License v1.0 (PDDL)&lt;br /&gt;
+Accessed: &lt;em&gt;February 01, 2020&lt;/em&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;brief-overview&quot;&gt;Brief Overview&lt;/h2&gt;
+&lt;p&gt;Aiming for the highest grade &lt;strong&gt;(A)&lt;/strong&gt; with submission of &lt;strong&gt;&lt;em&gt;3&lt;/em&gt;&lt;/strong&gt; Tableau prototypes &amp;amp; &lt;strong&gt;&lt;em&gt;2&lt;/em&gt;&lt;/strong&gt; D3.js visualizations&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A heatmap visualizing number of passengers in the inclusive time range 2010 - 2018 for airlines that had less than 1M passengers per year
+    &lt;ul&gt;
+      &lt;li&gt;Encoded data using an acceptable encoding: &lt;strong&gt;heatmap&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;Data grouped by individual Operating Airline Passenger Count per year&lt;/li&gt;
+      &lt;li&gt;Used Viridis color palette to encode the data, presented in the legend on the right&lt;/li&gt;
+      &lt;li&gt;Used titles and axis labels&lt;/li&gt;
+      &lt;li&gt;Included captions with my name and original data source
+ &lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;A stacked bar chart visualizing the number of passengers in the inclusive time range 2010 - 2018 for airlines that had less than 1M passengers per year, while separating them by activity (Enplaned vs Deplaned, which is equivalent to Arriving vs Departing passengers)
+    &lt;ul&gt;
+      &lt;li&gt;Encoded data using an acceptable encoding: &lt;strong&gt;stacked bars&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;Data grouped by Passenger Count for Activity Type across airlines satisfying above conditions (less than 1M passengers in total per annum) per year&lt;/li&gt;
+      &lt;li&gt;Used two colors to differentiate Activity type, presented in the legend on the right&lt;/li&gt;
+      &lt;li&gt;Used titles and axis labels&lt;/li&gt;
+      &lt;li&gt;Included captions with my name and original data source&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;visualization-1&quot;&gt;Visualization 1&lt;/h1&gt;
+
+&lt;h2 id=&quot;tableu-prototype&quot;&gt;Tableu Prototype&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;../d3-vis/h1-heatmap/tabl/proto.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;intepretation&quot;&gt;Intepretation&lt;/h2&gt;
+
+&lt;p&gt;On the X-axis we represent the inclusive time range 2010 - 2018, while the Y-axis represents the airline.&lt;/p&gt;
+
+&lt;p&gt;Passenger count in the heatmap is given for each airline (Y-axis) in a particular year (X-axis). Passenger count is encoded by Viridis color palette, with the legend displayed on the right-hand side. Colors with blue-ish hues are at the bottom of the scale representing smaller values, while colors with yellow-ish hues are at the top of the scale representing larger values.&lt;/p&gt;
+
+&lt;h2 id=&quot;data-wrangling&quot;&gt;Data Wrangling&lt;/h2&gt;
+
+&lt;p&gt;A row in the raw data represented passenger count for an airline in a given month of the year (this is a subset of each row info, as more columns were included in the original data). Data is slightly incomplete for the year 2019 and is missing 3 months. For this reason, 2019 related data was excluded.&lt;/p&gt;
+
+&lt;p&gt;After summarizing yearly passenger count for a particular airline, the following criteria were used to filter the results and exclude:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Airlines with passenger count &amp;gt; 1M for any particular year - so one can say this visualizes smaller volume airlines&lt;/li&gt;
+  &lt;li&gt;Airlines that had gap data (missing any month or a year) in the original data&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;You can find the filtered data &lt;a href=&quot;../d3-vis/h1-heatmap/airlines-clean.csv&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;We can conclude that there is generally a growth trend, although not significant. One interesting case is the “Frontier Airline” who experienced massive growth in passengers through SFO during the inclusive 2013-2016 time range, and then sharply fell in the following years.&lt;/p&gt;
+
+&lt;h3 id=&quot;sfo-passenger-trends-in-the-inclusive-2010-2018-time-range-for-airline-w-less-than-1-m-passengers-total-per-year&quot;&gt;SFO Passenger Trends in the inclusive 2010-2018 time range for airline w less than 1 M passengers total per year&lt;/h3&gt;
+
+&lt;svg id=&quot;heatmap&quot;&gt;&lt;/svg&gt;
+
+&lt;p&gt;&lt;em&gt;Author: Dejan Djokic&lt;/em&gt; &lt;br /&gt;
+&lt;em&gt;Original Data Source: &lt;a href=&quot;data.sfgov.org&quot;&gt;data.sfgov.org&lt;/a&gt;&lt;/em&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Resources/Inspirations:&lt;br /&gt;
+&lt;em&gt;&lt;a href=&quot;https://www.d3-graph-gallery.com/graph/heatmap_basic.html&quot;&gt;D3-Graph-Gallery&lt;/a&gt;&lt;/em&gt;&lt;br /&gt;
+&lt;em&gt;&lt;a href=&quot;https://blockbuilder.org/sjengle/47c5c20a18ec29f4e2b82905bdb7fe95&quot;&gt;Affordability Heatmap&lt;/a&gt;&lt;/em&gt;&lt;br /&gt;
+&lt;em&gt;&lt;a href=&quot;https://blockbuilder.org/achebrol/31833ec3fb7554d2b8e01e1ab32a09d1&quot;&gt;BlockBuilder Example&lt;/a&gt;&lt;/em&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;visualization-2&quot;&gt;Visualization 2&lt;/h1&gt;
+
+&lt;h2 id=&quot;tableu-prototype-1&quot;&gt;Tableu Prototype&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;../d3-vis//h1-stacked-chart/tabl/proto.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;intepretation-1&quot;&gt;Intepretation&lt;/h2&gt;
+
+&lt;p&gt;On the X-axis we represent the inclusive time range 2010 - 2018, while the Y-axis represents the number of passengers, in millions.&lt;/p&gt;
+
+&lt;p&gt;The stacked bars represent passenger activity (Enplaned vs Deplaned, which is equivalent to Arriving vs Departing passengers). We can reference the Y-axis to determine roughly the amount of passengers. But more so, we can compare the stacked bars from different years and see how the passenger count has changed for the two activities. Enplaned activity is represented with color hex &lt;code class=&quot;highlighter-rouge&quot;&gt;#4d78a7&lt;/code&gt;, while Deplaned activity is represented with color hex &lt;code class=&quot;highlighter-rouge&quot;&gt;#f28e2c&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;data-wrangling-1&quot;&gt;Data Wrangling&lt;/h2&gt;
+
+&lt;p&gt;From &lt;a href=&quot;#visualization-1&quot;&gt;Visualization #1&lt;/a&gt; data manipulation we filtered the airlines that we are interested in. For those same airlines, we summed all of their passengers’ counts for a particular passenger activity in a given year. Once again we excluded 2019 data due to incompleteness. Activity titled ‘Transit’ was also excluded, as it had only one data point.&lt;/p&gt;
+
+&lt;p&gt;You can find the filtered data &lt;a href=&quot;../d3-vis/h1-stacked-chart/data-clean.csv&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusions-1&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;We can conclude that the number of passengers Arriving and Departing stays more or less equally split for any given year. That is, it seems that there is a golden ration between Arriving and Departing passengers. Once again we can conclude that there is a growth trend overall in the number of passengers year-to-year just like we did in the first visualization. In this visualization, however, that is more apparent.&lt;/p&gt;
+
+&lt;h3 id=&quot;a-stacked-bar-chart-visualizing-the-number-of-passengers-in-the-inclusive-time-range-2010---2018-for-airlines-that-had-less-than-1m-passengers-per-year-while-separating-them-by-activity-enplaned-vs-deplaned&quot;&gt;A stacked bar chart visualizing the number of passengers in the inclusive time range 2010 - 2018 for airlines that had less than 1M passengers per year, while separating them by activity (Enplaned vs Deplaned)&lt;/h3&gt;
+&lt;svg id=&quot;stacked&quot;&gt;&lt;/svg&gt;
+&lt;p&gt;&lt;em&gt;Author: Dejan Djokic&lt;/em&gt; &lt;br /&gt;
+&lt;em&gt;Original Data Source: &lt;a href=&quot;data.sfgov.org&quot;&gt;data.sfgov.org&lt;/a&gt;&lt;/em&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Resources/Inspirations:&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;a href=&quot;https://www.d3-graph-gallery.com/graph/custom_legend.html&quot;&gt;D3-Graph-Gallery Ex 1&lt;/a&gt;&lt;/em&gt;&lt;br /&gt;
+&lt;em&gt;&lt;a href=&quot;https://www.d3-graph-gallery.com/graph/barplot_stacked_basicWide.html&quot;&gt;D3-Graph-Gallery Ex 2&lt;/a&gt;&lt;/em&gt;&lt;br /&gt;
+&lt;em&gt;&lt;a href=&quot;https://observablehq.com/@ericd9799/learning-stacked-bar-chart-in-d3-js&quot;&gt;BlockBuilder Example&lt;/a&gt;&lt;/em&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;visualization-3---prototype-only&quot;&gt;Visualization 3 - Prototype Only&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;../d3-vis/h1-stacked-chart-2/proto/proto.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;script src=&quot;https://d3js.org/d3.v5.js&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;../d3-vis/h1-heatmap/heatmap.js&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;../d3-vis/h1-stacked-chart/stacked.js&quot;&gt;&lt;/script&gt;
+
+</description>
+        <pubDate>Tue, 12 Feb 2019 00:00:00 -0800</pubDate>
+        <link>http://localhost:4000/posts/hw-1</link>
+        <guid isPermaLink="true">http://localhost:4000/posts/hw-1</guid>
       </item>
-    {% endfor %}
+    
   </channel>
 </rss>
